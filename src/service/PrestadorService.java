@@ -35,7 +35,7 @@ public class PrestadorService {
       public boolean validarPrestador(prestadores p) {
     if (p == null) return false;
     if (p.getNome() == null || p.getNome().isEmpty()) return false;
-    if (p.getRg() == null || p.getRg().length() != 11) return false;
+    if (p.getRg() == null || p.getRg().length() != 9) return false;
     return true;
 }
 }

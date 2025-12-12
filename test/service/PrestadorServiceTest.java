@@ -36,7 +36,7 @@ public class PrestadorServiceTest {
 
         prestadores p = new prestadores();
         p.setNome("João Silva");
-        p.setRg("12345678901");
+        p.setRg("381506692");
 
         boolean resultado = service.validarPrestador(p);
 

@@ -32,7 +32,7 @@ public class UsuarioServiceTest {
     }
 
         @org.junit.Test
-    public void deveValidarPrestadorValido() {
+    public void deveValidarUsuarioValido() {
         UsuarioService service = new UsuarioService();
 
         Usuarios u = new Usuarios();
