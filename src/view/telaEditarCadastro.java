@@ -1,20 +1,22 @@
 
 package view;
 
-import java.sql.Connection;
 import javax.swing.JOptionPane;
-import dao.Conexao;
-import dao.UsuarioDAO;
-import dao.prestadoresDAO;
 import model.Sessao;
 import model.Usuarios;
 import model.prestadores;
+import controller.EditarCadastroController;
+import dao.Conexao;
+import java.sql.Connection;
 
 
 public class telaEditarCadastro extends javax.swing.JFrame {
-
-    public telaEditarCadastro() {
+    private Usuarios usuario;
+    
+      public telaEditarCadastro(Usuarios usuario) {
+        this.usuario = usuario;
         initComponents();
+        setLocationRelativeTo(null);
         campoNomeSobrenome.setText(Sessao.nome);
         
         
@@ -40,8 +42,11 @@ public class telaEditarCadastro extends javax.swing.JFrame {
         txtEditarCadastrocidadeprestador.setText(Sessao.cidade);
 
     }
-}
-
+    }
+      
+    
+    private final EditarCadastroController controller = new EditarCadastroController();
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -327,56 +332,41 @@ public class telaEditarCadastro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-     try (Connection conexao = Conexao.conectar()) {
-         
-        int confirmacao = JOptionPane.showConfirmDialog(
-        null, 
-        "Deseja realmente salvar as alterações?", 
-        "Confirmar edição", 
-        JOptionPane.YES_NO_OPTION
-     );
+ 
+        try {
         
-    if (confirmacao == JOptionPane.YES_OPTION) {
         
         if (Sessao.status.equalsIgnoreCase("usuario")) {
             Usuarios usuario = new Usuarios();
-           
             usuario.setNome(txtEditarCadastronomeusuario.getText());
             usuario.setCpf(txtEditarCadastrocpfusuario.getText());
             usuario.setEndereco(txtEditarCadastroenderecousuario.getText());
             usuario.setContato(txtEditarCadastrocontatousuario.getText());
             usuario.setCadastro(Sessao.cadastroId);
-           
 
-            UsuarioDAO dao = new UsuarioDAO();
-            dao.atualizar(usuario);
-
-        } else if (Sessao.status.equalsIgnoreCase("prestador")) {
+             controller.atualizarUsuario(usuario);
+        } else {
             prestadores prestador = new prestadores();
-            prestador.setNome( txtEditarCadastronomePrestador.getText());
+            prestador.setNome(txtEditarCadastronomePrestador.getText());
             prestador.setRg(txtEditarCadastrorgprestador.getText());
-            prestador.setServico( txtEditarCadastroservicoprestador.getText());
+            prestador.setServico(txtEditarCadastroservicoprestador.getText());
             prestador.setContato(txtEditarCadastrocontatoPrestador.getText());
             prestador.setCidade(txtEditarCadastrocidadeprestador.getText());
             prestador.setCadastro(Sessao.cadastroId);
- 
-            
-            prestadoresDAO dao = new prestadoresDAO(conexao);
-            dao.atualizar(prestador);
-          }
 
-        JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso!");
-    } else {
-        JOptionPane.showMessageDialog(null, "Alterações canceladas.");
-    }
-    } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao salvar: " + e.getMessage());
+             controller.atualizarPrestador(prestador);
         }
-    
+
+          JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso!");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao salvar: " + e.getMessage());
+        e.printStackTrace();
+    }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnVoltar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltar2ActionPerformed
-    dispose();
+       dispose();
     }//GEN-LAST:event_btnVoltar2ActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed

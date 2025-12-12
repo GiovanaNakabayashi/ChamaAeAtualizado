@@ -1,15 +1,14 @@
 
 package view;
 
+import javax.swing.*;
+import java.sql.Connection;
 import dao.Conexao;
 import dao.LoginDAO;
 import dao.UsuarioDAO;
 import dao.prestadoresDAO;
-import javax.swing.*;
-import java.sql.Connection;
 import model.Cadastro;
 import model.Sessao;
-import model.Usuarios;
 import model.prestadores;
 
 
@@ -17,6 +16,7 @@ public class telaInicial extends javax.swing.JFrame {
 
     public telaInicial() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     
@@ -174,7 +174,7 @@ public class telaInicial extends javax.swing.JFrame {
 
     if (cadastro.getStatus().equalsIgnoreCase("usuario")) {
         UsuarioDAO usuarioDAO = new UsuarioDAO(conexao);
-        Usuarios usuario = usuarioDAO.buscarPorCadastroId(cadastro.getId());
+        model.Usuarios usuario = usuarioDAO.buscarPorCadastroId(cadastro.getId());
         Sessao.nome = usuario.getNome();
         Sessao.cpf = usuario.getCpf();
         Sessao.contato = usuario.getContato();

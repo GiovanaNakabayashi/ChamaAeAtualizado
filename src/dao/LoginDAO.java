@@ -16,6 +16,15 @@ private final Connection conexao;
     this.conexao = conexao;
     }
 
+      // Construtor padrão usando a classe Conexao
+    public LoginDAO() {
+        try {
+            this.conexao = Conexao.conectar();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados", e);
+        }
+    }
+    
     public Cadastro autenticar(String login, String senha) {
     String sql = "SELECT * FROM cadastro WHERE login = ? AND senha = ?";
     try (PreparedStatement stmt = conexao.prepareStatement(sql)) {

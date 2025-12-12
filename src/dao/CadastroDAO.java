@@ -30,8 +30,7 @@ public class CadastroDAO {
 
         final String sql = "INSERT INTO cadastro (login, senha, status) VALUES (?, ?, ?)";
 
-        try (PreparedStatement stmt =
-                conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, cadastro.getLogin());
             stmt.setString(2, cadastro.getSenha());
@@ -39,13 +38,14 @@ public class CadastroDAO {
 
             stmt.executeUpdate();
 
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
+          try (ResultSet rs = stmt.getGeneratedKeys()) {
+    if (rs.next()) {
+     return rs.getInt(1);
+    } else {
+ throw new SQLException("Erro ao obter o ID do cadastro.");
+   }
+ }
+ }}
 
-            throw new SQLException("Não foi possível obter o ID do cadastro.");
-        }
-    }
+
 }

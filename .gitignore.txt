@@ -1,0 +1,29 @@
+# NetBeans specific
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Build results
+/build/
+/dist/
+
+# Compiled class files
+*.class
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE folders (optional, if using other IDEs)
+.idea/
+.vscode/
+
+# Libraries (if you store jars inside the project, otherwise ignore this)
+*.jar

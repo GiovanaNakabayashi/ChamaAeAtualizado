@@ -2,7 +2,6 @@ package service;
 
 import dao.CadastroDAO;
 import model.Cadastro;
-
 import java.sql.SQLException;
 
 public class CadastroService {
@@ -13,27 +12,15 @@ public class CadastroService {
         this.cadastroDAO = new CadastroDAO();
     }
 
-    public int cadastrar(Cadastro cadastro) throws SQLException {
-        // Validação básica
-        if (cadastro.getLogin() == null || cadastro.getLogin().isEmpty()) {
-            throw new IllegalArgumentException("Login é obrigatório.");
-        }
-        if (cadastro.getSenha() == null || cadastro.getSenha().isEmpty()) {
-            throw new IllegalArgumentException("Senha é obrigatória.");
-        }
-        if (cadastro.getStatus() == null || cadastro.getStatus().isEmpty()) {
-            throw new IllegalArgumentException("Tipo de cadastro é obrigatório.");
-        }
 
-        // Insere no banco
+    public int cadastrar(Cadastro cadastro) throws SQLException, IllegalArgumentException, Exception {
+        validarCadastro(cadastro);  // chama a validação antes de inserir
         return cadastroDAO.inserir(cadastro);
     }
 
-
-    // Regras de validação (responsabilidade do Service, não da View)
-    private void validarCadastro(Cadastro c) throws Exception {
+     private void validarCadastro(Cadastro c) throws Exception {
         if (c.getLogin() == null || c.getLogin().isBlank()) {
-            throw new Exception("O login não pode estar vazio.");
+            throw new IllegalArgumentException("O login não pode estar vazio.");
         }
 
         if (c.getSenha() == null || c.getSenha().length() < 4) {
@@ -41,7 +28,6 @@ public class CadastroService {
         }
 
         if (c.getStatus() == null || c.getStatus().isBlank()) {
-            c.setStatus("ativo"); // valor padrão opcional
-        }
+            c.setStatus("ativo"); 
     }
-}
+     }}

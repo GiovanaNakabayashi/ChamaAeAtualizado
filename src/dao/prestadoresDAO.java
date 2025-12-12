@@ -22,10 +22,16 @@ public class prestadoresDAO {
        
        this.conexao = conexao;
   }
-
-
+     
+    public prestadoresDAO() {
+        try {
+            this.conexao = Conexao.conectar();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados: " + e.getMessage(), e);
+        }
+    }
     public void inserir(prestadores prestador, int cadastro) {
-        String sql = "INSERT INTO prestadores (nome, rg, servico, contato, cidade, cadastro_id) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO prestadores (nome, rg, servico, contato, cidade, idcadastro) VALUES (?,?,?,?,?,?)";
         
         try (PreparedStatement stmt = conexao.prepareStatement(sql)){
             
@@ -71,7 +77,7 @@ public class prestadoresDAO {
     }
      
     public prestadores buscarPorCadastroId(int cadastroId) {
-    String sql = "SELECT * FROM prestadores WHERE cadastro_id = ?";
+    String sql = "SELECT * FROM prestadores WHERE idcadastro = ?";
     try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
         stmt.setInt(1, cadastroId);
         ResultSet rs = stmt.executeQuery();
@@ -90,7 +96,7 @@ public class prestadoresDAO {
     return null;
 }
        public void atualizar(prestadores prestadores) {
-    String sql = "UPDATE prestadores SET nome = ?, rg = ?,servico = ?, contato = ?, cidade = ? WHERE cadastro_id = ?";
+    String sql = "UPDATE prestadores SET nome = ?, rg = ?,servico = ?, contato = ?, cidade = ? WHERE idcadastro= ?";
 
     try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
         stmt.setString(1, prestadores.getNome());

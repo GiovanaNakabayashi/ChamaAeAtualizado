@@ -1,6 +1,7 @@
 
 package view;
 
+import controller.TelaProcuraController;
 import dao.Conexao;
 import dao.UsuarioDAO;
 import dao.prestadoresDAO;
@@ -16,16 +17,19 @@ import javax.swing.table.TableRowSorter;
 import model.Sessao;
 import model.Usuarios;
 import model.prestadores;
+import service.PrestadorService;
 
 
 
 public class telaProcura extends javax.swing.JFrame {
     
     private TableRowSorter<DefaultTableModel> sorter;
+    private PrestadorService prestadorService;
       
 
     public telaProcura() {
         initComponents();
+        setLocationRelativeTo(null);
         configurarFiltro();
         carregarTabela();
         campoNomeSobrenome.setText(Sessao.nome);
@@ -60,39 +64,22 @@ public class telaProcura extends javax.swing.JFrame {
         }
      }
         private void configurarFiltro() {
-            DocumentListener listener = new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) {
-            filtrar();
-        }
+        DocumentListener listener = new DocumentListener() {
+        public void insertUpdate(DocumentEvent e) {filtrar(); }
+        public void removeUpdate(DocumentEvent e) {filtrar();}
+        public void changedUpdate(DocumentEvent e) {filtrar();}
 
-        public void removeUpdate(DocumentEvent e) {
-            filtrar();
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-            filtrar();
-        }
-
-    private void filtrar() {
+        private void filtrar() {
             String servico = txtProcuraServico.getText().trim();
             String cidade = txtCidadePrestador.getText().trim();
 
             ArrayList<RowFilter<Object, Object>> filtros = new ArrayList<>();
-
-            if (!servico.isEmpty()) {
-                filtros.add(RowFilter.regexFilter("(?i)" + servico, 1));
+            if (!servico.isEmpty()) {filtros.add(RowFilter.regexFilter("(?i)" + servico, 1));}
+            if (!cidade.isEmpty()) { filtros.add(RowFilter.regexFilter("(?i)" + cidade, 3));}
+            
+           sorter.setRowFilter(filtros.isEmpty() ? null : RowFilter.andFilter(filtros));
             }
-
-            if (!cidade.isEmpty()) {
-                filtros.add(RowFilter.regexFilter("(?i)" + cidade, 3));
-            }
-
-            if (filtros.isEmpty()) {
-                sorter.setRowFilter(null);
-            } else {
-                sorter.setRowFilter(RowFilter.andFilter(filtros));
-            }
-        }
+        
     };
 
     txtProcuraServico.getDocument().addDocumentListener(listener);
@@ -252,11 +239,18 @@ public class telaProcura extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
-    new telaEditarCadastro().setVisible(true);
-    dispose();
-    UsuarioDAO dao = new UsuarioDAO();
-    Usuarios usuario = dao.buscarPorCadastroId(Sessao.cadastroId);
- 
+       try {
+        TelaProcuraController controller = new TelaProcuraController();
+        Usuarios usuario = controller.buscarUsuarioLogado(Sessao.cadastroId);
+
+        // Agora você passa o usuário para a tela de edição
+        new telaEditarCadastro(usuario).setVisible(true);
+        dispose();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+    }
+
     }//GEN-LAST:event_btnConfigActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
