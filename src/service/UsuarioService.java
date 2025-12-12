@@ -6,6 +6,7 @@ import dao.Conexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import model.Usuarios;
+import model.prestadores;
 
 public class UsuarioService {
     
@@ -43,6 +44,13 @@ public class UsuarioService {
     }// outras validações
         dao.atualizar(usuario);
     }
+      
+        public boolean validarUsuario(Usuarios u) {
+    if (u == null) return false;
+    if (u.getNome() == null || u.getNome().isEmpty()) return false;
+    if (u.getCpf() == null || u.getCpf().length() != 11) return false;
+    return true;
+}
 }
 
         
